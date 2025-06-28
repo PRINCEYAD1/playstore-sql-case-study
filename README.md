@@ -1,94 +1,81 @@
-# playstore-sql-case-study
+### 📱 **Playstore Data Analysis (SQL Case Study)**
 
-readme_content = """# 📱 Playstore Data Analysis (SQL Case Study)
-
-This project is a complete end-to-end **SQL case study** focused on the analysis of Playstore mobile app data. The objective is to solve real-world business problems using data insights and demonstrate proficiency in SQL, data cleaning, and analytics.
+This project is a complete **SQL case study** based on Google Play Store app data. It demonstrates how to clean, analyze, and extract insights using MySQL, including real-world business problems, triggers, procedures, and SQL functions.
 
 ---
 
-## 📦 Dataset Overview
+### 📦 Dataset Overview
 
-The dataset includes app information such as:
-- App Name
-- Category
-- Rating
-- Reviews
-- Installs
-- Price
-- Content Rating
-- Last Updated
-- Current Version
-- Android Version
-- Genres
+The dataset includes information about apps from the Playstore, with fields like:
 
-The original data was cleaned using Python and imported into MySQL for structured querying and analysis.
+* App Name
+* Category
+* Rating
+* Reviews
+* Installs
+* Price
+* Genres
+* Content Rating
+* Last Updated
+* Current Version
+* Android Version
 
----
-
-## 🛠️ Tools & Technologies
-
-- **Python (pandas)** for initial data cleaning
-- **MySQL 8.0**
-- **MySQL Workbench**
-- **Triggers, Procedures, Functions, and CTEs**
+The data was initially cleaned using Python and then imported into MySQL for deeper analysis.
 
 ---
 
-## 🔍 Key Business Questions Solved
+### 🛠️ Tools & Technologies
 
-### A. KPI’s
-1. Total Revenue
-2. Average Order Value
-3. Total Pizzas Sold
-4. Total Orders
-5. Average Pizzas Per Order
-
-### B. Daily Trend for Total Orders  
-### C. Monthly Trend for Orders  
-### D. % of Sales by Pizza Category  
-### E. % of Sales by Pizza Size  
-### F. Total Pizzas Sold by Pizza Category  
-### G. Top 5 Pizzas by Revenue  
-### H. Bottom 5 Pizzas by Revenue  
-### I. Bottom 5 Pizzas by Quantity  
-### J. Top 5 Pizzas by Total Orders  
-### K. Bottom 5 Pizzas by Total Orders  
-
-### 📌 Advanced SQL Implementations
-- ✅ Triggers for logging price changes
-- ✅ Procedures for dynamic category checks
-- ✅ Functions for splitting multi-genre values
-- ✅ CTEs for comparative analysis
-- ✅ Correlation calculation using raw SQL
+* **Python (pandas)** – for data cleaning
+* **MySQL 8.0** – for database creation and query execution
+* **MySQL Workbench** – for query interface and data inspection
 
 ---
 
-## 📁 Files Included
+### 🔍 Business Problems Solved
 
-- `Playstore_Case_Study_Clean.sql` - Full SQL solution
-- `playstore.csv` - Cleaned dataset (not included here, please upload)
-- `README.md` - This file
-
----
-
-## 🚀 How to Use
-
-1. Upload the dataset to MySQL:
-   - Place `playstore.csv` in your secure upload directory (e.g., `C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/`)
-   - Use `LOAD DATA INFILE` command as shown in the SQL file
-
-2. Execute the `Playstore_Case_Study_Clean.sql` in MySQL Workbench
-
-3. Explore and modify queries to fit your use case
+1. Identify the top 5 categories for launching free apps based on average rating.
+2. Find the top 3 revenue-generating categories from paid apps.
+3. Calculate the percentage of gaming apps in each category.
+4. Decide whether to build Free or Paid apps based on category ratings.
+5. Track price changes using SQL triggers and log them.
+6. Restore original prices using historical logs.
+7. Find the correlation between app rating and number of reviews.
+8. Split multiple genres into two separate columns using SQL functions.
+9. Create a procedure to find underperforming apps in a given category.
+10. Explain the difference between Duration Time and Fetch Time in SQL.
 
 ---
 
-## 🙌 Acknowledgments
+### 📁 Files Included
 
-This project was built for portfolio and interview preparation. It demonstrates real-world SQL project capabilities using structured data.
+* `Playstore_Case_Study_Clean.sql` – Full SQL queries and logic
+* `playstore.csv` – Cleaned dataset (to be uploaded manually)
+* `README.md` – This file
 
 ---
 
-**Author**: Prince Yadav  
-**Database**: `new_project_analysis`  
-**License**: MIT
+### 🚀 How to Run
+
+1. Upload your CSV file (`playstore.csv`) into MySQL secure upload path (e.g., `C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/`)
+2. Import data using `LOAD DATA INFILE` as shown in the SQL script.
+3. Run the `Playstore_Case_Study_Clean.sql` in MySQL Workbench.
+4. Explore queries and analysis.
+
+---
+
+### 👨‍💻 Author
+
+**Prince Yadav**
+SQL & Python Enthusiast
+Database: `new_project_analysis`
+
+---
+
+### 🪪 License
+
+This project is open-source under the [MIT License](https://opensource.org/licenses/MIT).
+
+---
+
+Let me know if you want a `GitHub thumbnail image`, `cover banner`, or `SQL ER diagram` as well!
