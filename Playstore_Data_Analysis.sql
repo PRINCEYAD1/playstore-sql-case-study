@@ -1,5 +1,12 @@
 use new_project_analysis;
 
+select * from playstore;
+
+
+---
+
+use new_project_analysis;
+
 
 select * from playstore;
 
@@ -175,89 +182,158 @@ select  @numerator := round(sum(rat*rev),2) , @deno_1 := round(sum(sqrt_x),2) , 
 select round((@numerator)/(sqrt(@deno_1*@deno_2)),2) as corr_coeff
 
 
+-- 8. High Installs, Low Ratings
+-- Find categories where apps are downloaded a lot (many installs) but have low average ratings.
+-- This helps the team improve quality in popular categories.
+SELECT 
+    category,
+    AVG(rating) AS Avg_Rating,
+    AVG(installs) AS Avg_Insatalls
+FROM
+    playstore
+GROUP BY category
+order by Avg_Rating,Avg_Insatalls desc;
+
+
+-- 9. Which Categories Have Expensive Apps?
+-- Find out which categories have the highest average app price (only for paid apps).
+-- Useful for pricing decisions.
+select * from playstore;
+
+SELECT 
+    category, AVG(Price) AS Avg_Price
+FROM
+    playstore
+WHERE
+    type = 'Paid'
+GROUP BY category
+ORDER BY Avg_Price DESC;
 
 
 
--- 8. Your boss noticed  that some rows in genres columns have multiple generes in them, which was creating issue when developing the  recommendor system from the data
--- he/she asssigned you the task to clean the genres column and make two genres out of it, rows that have only one genre will have other column as blank.
-DELIMITER //
-CREATE FUNCTION f_name(a VARCHAR(100))
-RETURNS VARCHAR(100)
-DETERMINISTIC
-BEGIN
-    SET @l = LOCATE(';', a);
+-- 10. Fake Ratings Check
+-- Find apps with high ratings but very few reviews (less than 50).
+-- Maybe they’re not really popular – helps check for fake or biased ratings.
+select * from Playstore;
 
-    SET @s = IF(@l > 0, LEFT(a, @l - 1), a);
-
-    RETURN @s;
-END//
-DELIMITER ;
-
-select f_name('Art & Design;Pretend Play')
+SELECT 
+    App, Rating, Reviews
+FROM
+    playstore
+WHERE
+    Rating >= 4.5 AND Reviews < 50
+ORDER BY Reviews ASC;
 
 
--- function for second genre
-DELIMITER //
-create function l_name(a varchar(100))
-returns varchar(100)
-deterministic 
-begin
-   set @l = locate(';',a);
-   set @s = if(@l = 0 ,' ',substring(a,@l+1, length(a)));
-   
-   return @s;
-end //
-DELIMITER ;
+-- 11. Does App Size Affect Rating?
+--  Group apps by size (Small / Medium / Large) and find out which size has better average ratings.
+-- Helps optimize app size for better user feedback.
+select* from Playstore;
 
-select app, genres, f_name(genres) as 'gene 1', l_name(genres) as 'gene 2' from playstore
+SELECT 
+  CASE 
+    WHEN size < 20000 THEN 'Small'
+    WHEN size BETWEEN 20000 AND 50000 THEN 'Medium'
+    WHEN size > 50000 THEN 'Large'
+    ELSE 'Unknown'
+  END AS size_category,
+  ROUND(AVG(IFNULL(rating, 0)), 2) AS avg_rating
+FROM playstore
+WHERE size IS NOT NULL AND rating IS NOT NULL
+GROUP BY size_category;
 
 
 
 
--- 9. Your senior manager wants to know which apps are  not performing as par in their particular category, however he is not interested in handling too many files or
--- list for every  category and he/she assigned  you with a task of creating a dynamic tool where he/she  can input a category of apps he/she  interested in and 
--- your tool then provides real-time feedback by
--- displaying apps within that category that have ratings lower than the average rating for that specific category.
-
-DELIMITER //
-create PROCEDURE checking(in  cate varchar(30))
-begin
-
-		set @c=
-		(
-        
-		select average from 
-		 (
-			select category, round(avg(rating),2)  as average from playstore group by category
-		 )m where category = cate
-		);
-        
-        select * from playstore where category=cate and rating <@c;
-
-end//
-DELIMITER ;
 
 
-call checking('business')
+-- 12. Age Restriction Apps
+-- Find out which categories have more adult apps (rated Mature 17+ or Adults only 18+).
+-- Useful for legal and content compliance.
+select * from playstore;
+SELECT 
+    category, COUNT(*) AS Adults_App
+FROM
+    playstore
+WHERE
+    Content_Rating IN ('Mature 17+' , 'Adults only 18+')
+GROUP BY category
+ORDER BY Adults_App DESC; 	             	
 
--- 10. what is duration time and fetch time.
+
+
+
+
+-- 13. Old Apps in Playstore
+-- Show apps that have not been updated since 2016 or before.
+-- May be outdated or no longer useful.
+select * from playstore;
+SELECT app, category, last_updated
+FROM playstore
+WHERE YEAR(STR_TO_DATE(last_updated, '%B %d, %Y')) <= 2016;
+
+
+
+SELECT app, category, last_updated
+FROM playstore
+WHERE Last_updated <= 2016;
+
+
+
+
+
+
+-- 14. Popular Genres by Year
+--  Show which genres are getting more installs each year based on the Last Updated date.
+-- Good for finding trending genres.
+select * from playstore;
+select genres,sum(installs) as  Total_installs ,YEAR(STR_TO_DATE(last_updated, '%B %d, %Y')) AS update_year
+ from playstore 
+GROUP BY update_year, genres
+ORDER BY update_year, total_installs DESC;
+
+
+
+
+
+
+
+
+
+
+
+
+-- 15. Same App Name Check
+-- Find app names that appear more than once in the data.
+-- This helps remove  or check if different developers used the same name.
+select * from Playstore;
+SELECT 
+    app, COUNT(*) AS Count_app
+FROM
+    playstore
+GROUP BY app
+HAVING Count_app > 1; 
+
+
+
+
+-- 16. Popular but Low-Rated Apps
+--  Find apps with very high downloads (over 1 million) but low ratings (under 3).
+-- These need improvement – people are using them but not happy.
+SELECT app, installs, rating
+FROM playstore
+WHERE installs > 1000000 AND rating < 3
+ORDER BY installs DESC;
+
+
+
+
+-- 17. what is duration time and fetch time.
 
 
 -- Duration Time :- Duration time is how long  it takes system to completely understand the instructions given  from start to end  in proper order  and way.
 -- Fetch Time :- Once the instructions are completed , fetch ttime is like the time it takes for  the system to hand back the results, it depend on how quickly  ths system
                 -- can find  and bring back what you asked for.
                 
--- if query is simple  and have  to show large valume of data, fetch time will be large, If query is complex duration time will be large.
 
 
-/*EXAMPLE
-Duration Time: Imagine you type in your search query, such as "fiction books," and hit enter. The duration time is the period it takes for the system to process your 
-request from the moment you hit enter until it comprehensively understands what you're asking for and how to execute it. This includes parsing your query, 
-analyzing keywords, and preparing to fetch the relevant data.
-
-Fetch Time: Once the system has fully understood your request, it begins fetching the results. Fetch time refers to the time it takes for the system to 
-retrieve and present the search results back to you.
-
-For instance, if your query is straightforward but requires fetching a large volume of data (like all fiction books in the library), the fetch time may be
- prolonged as the system sifts through extensive records to compile the results. Conversely, if your query is complex, involving multiple criteria or parameters,
- the duration time might be longer as the system processes the intricacies of your request before initiating the fetch process.*/
